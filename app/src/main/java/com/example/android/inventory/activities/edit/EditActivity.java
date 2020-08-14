@@ -2,6 +2,7 @@ package com.example.android.inventory.activities.edit;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.Menu;
@@ -21,6 +22,8 @@ import com.example.android.inventory.R;
 import com.example.android.inventory.data.InventoryDatabase;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
+
+import java.io.ByteArrayOutputStream;
 
 
 public class EditActivity extends AppCompatActivity implements EditContract.View {
@@ -83,7 +86,15 @@ public class EditActivity extends AppCompatActivity implements EditContract.View
             inventory.setPrice(editText_price.getText().toString());
             inventory.setDescription(editText_description.getText().toString());
             inventory.setQuantity(editText_quantity.getText().toString());
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            byte[] imageInByte = stream.toByteArray();
+            inventory.setImage(imageInByte);
             presenter.saveItem(inventory);
+
+            if(inventory.getTitle()!=null || inventory.getDescription()!=null || inventory.getPrice()!=null || inventory.getQuantity()!=null){
+                presenter.update(inventory);
+            }
         });
     }
 
@@ -105,6 +116,8 @@ public class EditActivity extends AppCompatActivity implements EditContract.View
         editText_price.setText(String.valueOf(inventory.getPrice()));
         editText_description.setText(inventory.getDescription());
         editText_quantity.setText(inventory.getQuantity());
+        Bitmap bmp = BitmapFactory.decodeByteArray(inventory.getImage(), 0, inventory.getImage().length);
+        imageView.setImageBitmap(bmp);
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {

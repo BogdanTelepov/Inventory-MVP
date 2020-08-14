@@ -3,10 +3,12 @@ package com.example.android.inventory.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.android.inventory.model.Inventory;
 import com.example.android.inventory.R;
 import com.example.android.inventory.activities.main.MainContract;
@@ -31,11 +33,15 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.inventory = inventoryList.get(position);
-        holder.nameTextView.setText(inventoryList.get(position).getTitle());
-        holder.priceTextView.setText(String.valueOf(inventoryList.get(position).getPrice()));
-        holder.supplierTextView.setText(inventoryList.get(position).getDescription());
-        holder.quantityTextView.setText(inventoryList.get(position).getQuantity());
+        Inventory currentInventory = inventoryList.get(position);
+        holder.inventory = currentInventory;
+        holder.txtTitle.setText(currentInventory.getTitle());
+        holder.txtPrice.setText(String.valueOf(currentInventory.getPrice()));
+        holder.txtDescription.setText(currentInventory.getDescription());
+        holder.txtQuantity.setText(currentInventory.getQuantity());
+//        Glide.with(holder.imageView.getContext())
+//                .load(currentInventory.getImage())
+//                .into(holder.imageView);
 
         holder.view.setOnClickListener(v -> onItemClickListener.onItemClick(holder.inventory));
     }
@@ -52,19 +58,21 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final View view;
-        private final TextView nameTextView;
-        private final TextView priceTextView;
-        private final TextView supplierTextView;
-        private final TextView quantityTextView;
-        private Inventory inventory;
+        private final TextView txtTitle;
+        private final TextView txtPrice;
+        private final TextView txtDescription;
+        private final TextView txtQuantity;
+        private ImageView imageView;
+        public Inventory inventory;
 
         public ViewHolder(View view) {
             super(view);
             this.view = view;
-            nameTextView = view.findViewById(R.id.txt_item_title);
-            priceTextView = view.findViewById(R.id.txt_item_price);
-            supplierTextView = view.findViewById(R.id.txt_item_description);
-            quantityTextView = view.findViewById(R.id.txt_item_quantity);
+            txtTitle = view.findViewById(R.id.txt_item_title);
+            txtPrice = view.findViewById(R.id.txt_item_price);
+            txtDescription = view.findViewById(R.id.txt_item_description);
+            txtQuantity = view.findViewById(R.id.txt_item_quantity);
+            imageView = view.findViewById(R.id.image_item);
 
         }
     }
